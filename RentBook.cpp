@@ -3,14 +3,16 @@ using namespace std;
 RentBook::RentBook(long rid, long aid, QDate rentD, QDate expireD, QDate returnD ,  long bid, long btid, int st, long f)
     :rentID(rid),
     accID(aid),
-    rentDate(rentD),
-    expDate(expireD),
-    returnDate(returnD),
+
     bookID(bid),
     bookTypeID(btid),
     state(st),
     fine(f)
-{}
+{
+    setRentDate(rentD);
+    setExpireDate(expireD);
+    setReturnDate(returnD);
+}
 void RentBook::setRentID(long rid)
 {
     rentID = rid;
@@ -21,11 +23,13 @@ void RentBook::setAccID(long aid)
 }
 void RentBook::setRentDate(const QDate &rent)
 {
-    rentDate = rent;
+    rent.toString("dd/MM/yyyy").toStdString().copy(rentDate,10);
+    rentDate[10] = '\0';
 }
 void RentBook::setExpireDate(const QDate &exp)
 {
-    expDate = exp;
+    exp.toString("dd/MM/yyyy").toStdString().copy(expDate,10);
+    expDate[10] = '\0';
 }
 void RentBook::setBookID(long bid)
 {
@@ -42,11 +46,11 @@ long RentBook::getAccID() const
 }
 QDate RentBook::getRentDate() const
 {
-    return rentDate;
+    return QDate::fromString(QString(rentDate),"dd/MM/yyyy");
 }
 QDate RentBook::getExpDate() const
 {
-    return expDate;
+    return QDate::fromString(QString(expDate),"dd/MM/yyyy");
 }
 long RentBook::getBookID() const
 {
@@ -91,11 +95,12 @@ long RentBook::getFine() const
 }
 void RentBook::setReturnDate(QDate d)
 {
-    returnDate = d;
+    d.toString("dd/MM/yyyy").toStdString().copy(returnDate, 10);
+    returnDate[10] = '\0';
 }
 QDate RentBook::getReturnDate() const
 {
-    return returnDate;
+    return QDate::fromString(QString(returnDate),"dd/MM/yyyy");
 }
 void RentBook::setBookTypeID(long id)
 {
