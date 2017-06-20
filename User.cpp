@@ -13,8 +13,7 @@ User::User(long lid, long uid , long pid , string name, string dob , string job 
 }
 enum {NBOOKTYPE =1 , NUSER = 2 , NACCOUNT = 3, NRENT = 4, NNOTIF = 5, NTEMPACC = 6, NTEMPUSER =7 , NBOOK = 8, NUMLINE =9};
 
-User::User(long lid, long uid, long pid, string name, string dob, string job, string mail
-    , int st)
+User::User(long lid, long uid, long pid, string name, string dob, string job, string mail, int st)
     :libID(lid), userID(uid), PID(pid),numAccount(0), state(st)
 {
     setFullName(name);
@@ -139,21 +138,42 @@ long User::getFAccount()
 }
 void User::readUser(long id)
 {
-    fstream dataFin("user_data.txt");
+    fstream dataFin("user_data.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!dataFin)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     dataFin.seekg((id - 1) * sizeof(User));
     dataFin.read(reinterpret_cast<char*>(this), sizeof(User));
     dataFin.close();
 }
 void User::saveUser()
 {
-    fstream dataFout("user_data.txt");
+    fstream dataFout("user_data.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!dataFout)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     dataFout.seekg((getLibID() - 1) * sizeof(User));
     dataFout.write(reinterpret_cast<char*>(this), sizeof(User));
     dataFout.close();
 }
 void User::saveUser(long id)
 {
-    fstream dataFout("user_data.txt");
+    fstream dataFout("user_data.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!dataFout)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     dataFout.seekg((id - 1) * sizeof(User));
     dataFout.write(reinterpret_cast<char*>(this), sizeof(User));
     dataFout.close();
@@ -187,6 +207,13 @@ long User::getParam(int pos)
 {
 
     fstream paramFin("param_data.txt");
+    if (!paramFin)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     string temp;
     long value;
     for (int i = 1 ; i <= pos ; ++i)
@@ -199,7 +226,21 @@ long User::getParam(int pos)
 void User::setParam(long value, int pos)
 {
     fstream paramFin("param_data.txt");
+    if (!paramFin)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     ofstream paramFout("foo.txt");
+    if (!paramFout)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     string temp;
     long val;
     for (int i = 1 ; i < pos  ; ++i)
@@ -222,26 +263,6 @@ void User::setParam(long value, int pos)
     paramFout.close();
     remove("param_data.txt");
     rename("foo.txt", "param_data.txt");
-}
-
-
-QString User::QDateToString(const QDate& date)
-{
-    QString ans;
-    ans = (QString::number(date.day()).size() == 1 ? "0" + QString::number(date.day()) : QString::number(date.day())) + "/"
-            + (QString::number(date.month()).size() == 1 ? "0" + QString::number(date.month()) : QString::number(date.month())) + "/"
-            + QString::number(date.year());
-    return ans;
-}
-QDate User::stringToQDate(QString date)
-{
-    replace(date.begin(), date.end(),'/',' ');
-    stringstream dateStr(date.toStdString());
-    int day;
-    int month;
-    int year;
-    dateStr >> day >> month >> year;
-    return QDate(day,month,year);
 }
 bool User::Search(string dest , string findKey)			//New function
 {
