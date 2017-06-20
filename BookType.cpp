@@ -79,21 +79,42 @@ int BookType::getAmount() const
 }
 void BookType::readData(long bid)
 {
-    std::ifstream bookFin("book_data.txt");
+    std::ifstream bookFin("book_data.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!bookFin)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     bookFin.seekg((bid - 1) * sizeof(BookType));
     bookFin.read(reinterpret_cast<char*>(this), sizeof(BookType));
     bookFin.close();
 }
 void BookType::saveData()
 {
-    std::fstream bookFout("book_data.txt");
+    std::fstream bookFout("book_data.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!bookFout)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     bookFout.seekp((getBookID() - 1) * sizeof(BookType));
     bookFout.write(reinterpret_cast<char*>(this), sizeof(BookType));
     bookFout.close();
 }
 void BookType::saveData(long id)
 {
-    std::fstream bookFout("book_data.txt");
+    std::fstream bookFout("book_data.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!bookFout)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     bookFout.seekp((id - 1) * sizeof(BookType));
     bookFout.write(reinterpret_cast<char*>(this), sizeof(BookType));
     bookFout.close();
