@@ -3,8 +3,10 @@
 
 
 Book::Book(long tID, long bid, QDate addD, int st , long acc)
-    :typeID(tID), bookID(bid), addDate(addD), state(st), rentID(acc)
-{}
+    :typeID(tID), bookID(bid), state(st), rentID(acc)
+{
+    setAddDate(addD);
+}
 long Book::getTypeBook() const
 {
     return typeID;
@@ -34,7 +36,14 @@ long Book::getState() const
 }
 void Book::readData(long id)
 {
-    std::ifstream bookFin("book_data_list.txt");
+    std::ifstream bookFin("book_data_list.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!bookFin)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     bookFin.seekg((id - 1) * sizeof(Book));
     bookFin.read(reinterpret_cast<char*>(this), sizeof(Book));
     bookFin.close();
@@ -42,26 +51,41 @@ void Book::readData(long id)
 
 void Book::saveData(long id)
 {
-    std::fstream bookFout("book_data_list.txt");
+    std::fstream bookFout("book_data_list.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!bookFout)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     bookFout.seekp((id - 1) * sizeof(Book));
     bookFout.write(reinterpret_cast<char*>(this), sizeof(Book));
     bookFout.close();
 }
 void Book::saveData()
 {
-    std::fstream bookFout("book_data_list.txt");
+    std::fstream bookFout("book_data_list.txt", std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+    if (!bookFout)
+    {
+        QMessageBox message;
+        message.setWindowTitle("Lỗi chương trình");
+        message.setText("Không thể đọc file");
+        message.exec();
+    }
     bookFout.seekp((getBookID() - 1) * sizeof(Book));
     bookFout.write(reinterpret_cast<char*>(this), sizeof(Book));
     bookFout.close();
 }
 void Book::setAddDate(const QDate& date)
 {
-    addDate = date;
+    date.toString("dd/MM/yyyy").toStdString().copy(addDate,10);
+    addDate[10] ='\0';
 }
 
 QDate Book::getAddDate() const
 {
-    return addDate;
+    return QDate::fromString(addDate,"dd/MM/yyyy");
 }
 long Book::getRentID() const
 {
