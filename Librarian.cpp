@@ -195,9 +195,9 @@ void Librarian::findBook_find()
         tempB.readData(i +1);
         if (tempB.getBookID() != 0)
         {
-        if (tempB.getAuthor().find(findKey) != std::string::npos
-                || tempB.getName().find(findKey) != std::string::npos
-                || tempB.getSummary().find(findKey) !=std::string::npos)
+        if (Search(tempB.getAuthor(),findKey)
+                || Search(tempB.getName(),findKey)
+                || Search(tempB.getSummary(),findKey)))
         {
             // Điền thông tin
 
