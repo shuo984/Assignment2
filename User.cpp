@@ -266,13 +266,25 @@ void User::setParam(long value, int pos)
 }
 bool User::Search(string dest , string findKey)			//New function
 {
-    stringstream love(findKey);
-    string temp;
-
-    while (love >> temp)
-        if (dest.find(temp) == std::string::npos)
-            return false;
-    return true;
+    for (int i = 0 ; i < t.size() ; ++i)
+		if (isalpha(t[i]))
+			t[i] = tolower(t[i]);
+	for (int i = 0 ; i < s.size() ; ++i)
+		if (isalpha(s[i]))
+			s[i] = tolower(s[i]);
+    int **diff = new int*[s.size() + 1];
+    for (int i = 0 ; i <= s.size() ; ++i)
+        diff[i] = new int[t.size() + 1];
+    for (int i = 0 ; i < s.size() ; ++i)
+        for (int j = 0 ; j < t.size(); ++j )
+            diff[i+1][j+1] = min({diff[i][j+1] + 1,
+                diff[i+1][j] + 1, diff[i][j] + (s[i] == t[j] ? 0 : 1) });
+    int ans = diff[s.size()][t.size()];
+    for (int i = 0 ; i <= s.size() ; ++i)
+        delete[] diff[i];
+    delete[] diff;
+    double pct = 1 - (double)ans/max(s.size(), t.size());
+    return (pct > 0.8);
 }
 
 void User::deleteUser(int pos)
