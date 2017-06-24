@@ -521,6 +521,7 @@ void Librarian::editBook_beg(long i)
 {
     BookType tempB;
     tempB.readData(i);
+    ui->listBookView_2->setCurrentIndex(0);
     ui->editBook_successLabel->setVisible(false);
     ui->editBook_amountLine->setText(QString::number(tempB.getAmount()));
     ui->editBook_authorLine->setText(QString(tempB.getAuthor().c_str()));
